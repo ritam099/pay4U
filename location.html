@@ -80,10 +80,11 @@
                     <p class="lead">You can contact us or visit us.</p>
                    
                         <button id="clickme" class="btn btn-primary btn-lg"> Click Here</button>
-                        
+                        <button id="googlemap" class="btn btn-primary btn-lg"> Get Route</button>
+                        <div id="errorArea" class="alert d-none"></div>
                     </p>
                     <p class="lead"> 
-                        <a href="https://www.google.com/mapsq=12.9466368, 77.627392" >Open in Google Maps</a>
+                        <!-- <a href="https://www.google.com/mapsq=12.9466368, 77.627392" >Open in Google Maps</a> -->
                     </p>
                     <div id="errorArea" class="alert d-none"></div>
                     
@@ -101,6 +102,35 @@
         <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
 
         <script>
+            let getloc1=document.getElementById("googlemap");
+      getloc1.addEventListener('click',event=>{
+          if('geolocation' in navigator){
+              navigator.geolocation.getCurrentPosition(pos=>{
+                  window.open("https://www.google.com/maps/dir/"+pos.coords.latitude+","+pos.coords.longitude+"/28.710353824707465,77.1640406020339");
+                  // Display the map   //           
+              },error=>{
+                  let msg="";
+                  switch(error.code){
+                      case error.PERMISSION_DENIED:
+                          msg="User Denied Permission";
+                          break;
+                      case error.POSITION_UNAVAILABLE:
+                          msg="Can't Locate User's Position";
+                          break;
+                      case error.TIMEOUT:
+                          msg="Time out";
+                          break;
+                  }
+               let errorArea=document.getElementById("errorArea");
+               errorArea.innerHTML=msg;
+               errorArea.classList.remove("d-none");
+              })
+
+          }else{
+              console.log("Update your browser to get Geolocation Object");
+          }
+
+      })
             let getloc=document.getElementById("clickme");
             getloc.addEventListener('click',event=>{
                 if('geolocation' in navigator){
